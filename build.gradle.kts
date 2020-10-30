@@ -26,6 +26,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+    implementation("org.jsoup:jsoup:1.13.1")
+
     implementation("com.querydsl:querydsl-jpa:${queryDslVersion}")
     kapt("com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
