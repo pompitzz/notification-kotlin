@@ -1,0 +1,30 @@
+{
+  "object_type": "list",
+  "header_title": "국내 코로나 상황(2020-10-30)",
+  "header_link": {
+    "web_url": "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun="
+  },
+  "contents": [
+    {
+      "title": "확진자: 150명",
+      "image_url": "",
+      "link": {
+        "web_url": "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun="
+      }
+    },
+    {
+      "title": "서울: 30명 \n서울: 30명",
+      "image_url": "",
+      "link": {
+        "web_url": "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun="
+      }
+    },
+    {
+      "title": "부산: 20명 \n서울: 30명",
+      "image_url": "",
+      "link": {
+        "web_url": "http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun="
+      }
+    }
+  ]
+}
