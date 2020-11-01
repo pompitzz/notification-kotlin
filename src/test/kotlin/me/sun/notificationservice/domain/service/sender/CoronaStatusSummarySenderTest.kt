@@ -1,4 +1,4 @@
-package me.sun.notificationservice.domain.sender
+package me.sun.notificationservice.domain.service.sender
 
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
 import org.junit.jupiter.api.Test
@@ -12,9 +12,10 @@ internal class CoronaStatusSummarySenderTest {
 
     @Test
     fun send() {
-        coronaStatusSummarySender.send(MemberDto(
-                "jEKGw84a0xIixqQS8aejKhdFTvCvSI81hKHS7gopyNoAAAF1f2GsPA",
-                listOf(CoronaStatusRegion.BUSAN, CoronaStatusRegion.SEOUL)
-        ))
+        coronaStatusSummarySender.send(
+                listOf(
+                        MemberDto("_7ecotJRpF-RcJqkUZqLB2S6fDe4VCwgrrKb3AopcNEAAAF1gs11QQ", listOf(CoronaStatusRegion.BUSAN, CoronaStatusRegion.SEOUL)),
+                        MemberDto("_7ecotJRpF-RcJqkUZqLB2S6fDe4VCwgrrKb3AopcNEAAAF1gs11QQ", emptyList())
+                ))
     }
 }

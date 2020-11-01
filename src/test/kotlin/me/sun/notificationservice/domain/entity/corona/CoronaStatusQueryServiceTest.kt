@@ -6,40 +6,40 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
 import me.sun.notificationservice.config.MockKTest
-import me.sun.notificationservice.domain.adapter.CoronaParser
-import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion.*
-import me.sun.notificationservice.domain.entity.corona.repo.KoreaCoronaStatusRepository
-import me.sun.notificationservice.domain.entity.corona.service.KoreaCoronaStatusQueryService
+import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion.BUSAN
+import me.sun.notificationservice.domain.entity.corona.repo.CoronaStatusRepository
+import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusQueryService
+import me.sun.notificationservice.domain.service.parser.KoreaCoronaStatusParseResult
+import me.sun.notificationservice.domain.service.parser.KoreaDailyCoronaParser
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MockKTest
-internal class KoreaCoronaStatusQueryServiceTest {
+internal class CoronaStatusQueryServiceTest {
     @InjectMockKs
-    lateinit var koreaCoronaStatusQueryService: KoreaCoronaStatusQueryService
+    lateinit var coronaStatusQueryService: CoronaStatusQueryService
 
     @RelaxedMockK
-    lateinit var coronaStatusRepository: KoreaCoronaStatusRepository
+    lateinit var coronaStatusRepository: CoronaStatusRepository
 
     @MockK
-    lateinit var coronaParser: CoronaParser
+    lateinit var koreaDailyCoronaParser: KoreaDailyCoronaParser
 
     @Test
     fun `bulk when parser return empty list, should not call saveAll`() {
         // given
-        every { coronaParser.parse() } returns emptyList()
+        every { koreaDailyCoronaParser.parse() } returns KoreaCoronaStatusParseResult(LocalDateTime.now(), emptyList())
 
         // when
-        koreaCoronaStatusQueryService.bulkCoronaStatus()
+        coronaStatusQueryService.bulkCoronaStatus()
 
         // then
-        verify(exactly = 1) { coronaParser.parse() }
+        verify(exactly = 1) { koreaDailyCoronaParser.parse() }
         verify(exactly = 0) { coronaStatusRepository.saveAll(emptyList()) }
     }
 
@@ -49,7 +49,7 @@ internal class KoreaCoronaStatusQueryServiceTest {
         val tomorrow = LocalDate.now().plusDays(1)
 
         // when && then
-        assertThatThrownBy { koreaCoronaStatusQueryService.findByMeasurementDate(tomorrow) }
+        assertThatThrownBy { coronaStatusQueryService.findByMeasurementDate(tomorrow) }
                 .isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("measurementDay must not be after today. but is $tomorrow")
     }
@@ -64,7 +64,7 @@ internal class KoreaCoronaStatusQueryServiceTest {
         every { coronaStatusRepository.findByMeasurementDate(today) } returns stubData
 
         // when
-        val coronaStatusList = koreaCoronaStatusQueryService.findByMeasurementDate(today)
+        val coronaStatusList = coronaStatusQueryService.findByMeasurementDate(today)
 
         // then
         assertThat(coronaStatusList).isEqualTo(stubData)
@@ -82,7 +82,7 @@ internal class KoreaCoronaStatusQueryServiceTest {
         every { coronaStatusRepository.findByMeasurementDate(today) } returns stubData
 
         // when
-        val coronaStatusList = koreaCoronaStatusQueryService.findTodayOrYesterdayStatuses()
+        val coronaStatusList = coronaStatusQueryService.findTodayOrYesterdayStatuses()
 
         // then
         assertThat(coronaStatusList).isEqualTo(stubData)
@@ -101,7 +101,7 @@ internal class KoreaCoronaStatusQueryServiceTest {
         every { coronaStatusRepository.findByMeasurementDate(yesterday) } returns stubData
 
         // when
-        val coronaStatusList = koreaCoronaStatusQueryService.findTodayOrYesterdayStatuses()
+        val coronaStatusList = coronaStatusQueryService.findTodayOrYesterdayStatuses()
 
         // then
         assertThat(coronaStatusList).isEqualTo(stubData)
@@ -111,14 +111,14 @@ internal class KoreaCoronaStatusQueryServiceTest {
 }
 
 @SpringBootTest
-internal class KoreaCoronaStatusQueryServiceIntegTest {
+internal class CoronaStatusQueryServiceIntegTest {
     @Autowired
-    lateinit var koreaCoronaStatusQueryService: KoreaCoronaStatusQueryService
+    lateinit var coronaStatusQueryService: CoronaStatusQueryService
 
     @Test
     fun bulkTest() {
-        koreaCoronaStatusQueryService.bulkCoronaStatus()
-        koreaCoronaStatusQueryService.findByMeasurementDate(LocalDate.now().minusDays(1))
+        coronaStatusQueryService.bulkCoronaStatus()
+        coronaStatusQueryService.findByMeasurementDate(LocalDate.now().minusDays(1))
                 .forEach {
                     with(it) {
                         println("CoronaStatus(id=$id, region='$region', domesticOccurrenceCount=$domesticOccurrenceCount, foreignInflowCount=$foreignInflowCount, measurementTime=$measurementDateTime)")

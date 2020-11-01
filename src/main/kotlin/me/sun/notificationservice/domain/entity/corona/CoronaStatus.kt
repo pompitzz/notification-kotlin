@@ -1,8 +1,7 @@
 package me.sun.notificationservice.domain.entity.corona
 
-import java.lang.IllegalArgumentException
 import java.time.LocalDateTime
-import java.util.HashMap
+import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

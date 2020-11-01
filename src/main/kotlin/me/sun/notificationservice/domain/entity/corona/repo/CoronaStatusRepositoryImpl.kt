@@ -6,7 +6,7 @@ import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.QCoronaStatus.coronaStatus
 import java.time.LocalDate
 
-class KoreaCoronaStatusRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) : KoreaCoronaStatusRepositoryCustom {
+class CoronaStatusRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) : CoronaStatusRepositoryCustom {
     override fun findByMeasurementDate(measurementDate: LocalDate): List<CoronaStatus> =
             jpaQueryFactory
                     .selectFrom(coronaStatus)

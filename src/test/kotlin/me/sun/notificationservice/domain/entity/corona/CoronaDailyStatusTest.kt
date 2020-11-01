@@ -1,26 +1,26 @@
 package me.sun.notificationservice.domain.entity.corona
 
-import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion.BUSAN
-import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion.SEOUL
-import me.sun.notificationservice.domain.entity.corona.service.KoreaCoronaStatusMessageProvider
-import org.assertj.core.api.Assertions.assertThat
+import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusSummary
+import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusSummaryProvider
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
-//@Disabled
+@Disabled
 @SpringBootTest
-internal class KoreaCoronaStatusMessageProviderTest {
+internal class CoronaStatusSummaryProviderTest {
 
     @Autowired
-    lateinit var koreaCoronaStatusMessageProvider: KoreaCoronaStatusMessageProvider
+    lateinit var coronaStatusSummaryProvider: CoronaStatusSummaryProvider
 
     @Test
     fun provide() {
         // when
-        val coronaDailyStatusSummary = koreaCoronaStatusMessageProvider.provide(listOf(BUSAN, SEOUL))
+        val summary: CoronaStatusSummary = coronaStatusSummaryProvider.provide()
 
         // then
-        assertThat(coronaDailyStatusSummary.koreaCoronaStatusList.size).isEqualTo(2)
+        println("date: ${summary.measurementDate} (${summary.totalConfirmedPersonCount})")
+        summary.coronaStatusMap.forEach { (_, value) -> println("${value.region}: ${value.domesticOccurrenceCount}, ${value.foreignInflowCount}") }
     }
 }

@@ -1,23 +1,28 @@
 package me.sun.notificationservice.domain.entity.corona.service
 
-import me.sun.notificationservice.domain.adapter.CoronaParser
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus
-import me.sun.notificationservice.domain.entity.corona.repo.KoreaCoronaStatusRepository
+import me.sun.notificationservice.domain.entity.corona.repo.CoronaStatusRepository
+import me.sun.notificationservice.domain.service.parser.KoreaCoronaStatusParseResult
+import me.sun.notificationservice.domain.service.parser.KoreaDailyCoronaParser
+import me.sun.notificationservice.domain.utils.logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
-class KoreaCoronaStatusQueryService(
-        private val coronaStatusRepository: KoreaCoronaStatusRepository,
-        private val coronaParser: CoronaParser
+class CoronaStatusQueryService(
+        private val coronaStatusRepository: CoronaStatusRepository,
+        private val koreaDailyCoronaParser: KoreaDailyCoronaParser
 ) {
+    private val log = logger<CoronaStatusQueryService>()
+
     fun bulkCoronaStatus() {
-        val koreaCoronaStatusByRegionList = coronaParser.parse()
-        if (koreaCoronaStatusByRegionList.isEmpty()) return
+        val koreaCoronaStatusParseResult: KoreaCoronaStatusParseResult = koreaDailyCoronaParser.parse()
 
-        val coronalStatusList = koreaCoronaStatusByRegionList.map { it.toEntity() }
-
-        // TODO 동일 시간 데이터가 이미 있으면 return하기
+        if (koreaCoronaStatusParseResult.isEmpty()) {
+            log.warn("koreaCoronaStatusParseResult is Empty")
+            return
+        }
+        val coronalStatusList = koreaCoronaStatusParseResult.toEntities()
 
         coronaStatusRepository.saveAll(coronalStatusList)
     }
@@ -45,6 +50,6 @@ class KoreaCoronaStatusQueryService(
 
 private fun LocalDate.validateMeasurementDay() {
     if (this.isAfter(LocalDate.now())) {
-        throw IllegalArgumentException("measurementDay must not be after today. but is $this")
+        throw IllegalArgumentException("measurementDay must not be after today.")
     }
 }
