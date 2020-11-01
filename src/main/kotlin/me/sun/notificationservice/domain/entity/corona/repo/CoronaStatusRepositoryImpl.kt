@@ -6,15 +6,15 @@ import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.QCoronaStatus.coronaStatus
 import java.time.LocalDate
 
-class CoronaStatusRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) : CoronaStatusRepositoryCustom {
+class CoronaStatusRepositoryImpl(private val queryFactory: JPAQueryFactory) : CoronaStatusRepositoryCustom {
     override fun findByMeasurementDate(measurementDate: LocalDate): List<CoronaStatus> =
-            jpaQueryFactory
+            queryFactory
                     .selectFrom(coronaStatus)
                     .where(isMeasurementDay(measurementDate))
                     .fetch()
 
     override fun countByMeasurementDate(measurementDate: LocalDate): Long =
-            jpaQueryFactory
+            queryFactory
                     .selectFrom(coronaStatus)
                     .where(isMeasurementDay(measurementDate))
                     .fetchCount()

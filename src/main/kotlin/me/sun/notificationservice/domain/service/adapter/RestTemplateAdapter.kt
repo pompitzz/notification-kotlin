@@ -13,7 +13,10 @@ object RestTemplateAdapter {
 
         val headers = HttpHeaders()
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED.toString())
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
+
+        if (accessToken != null) {
+            headers.add(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
+        }
 
         val body = LinkedMultiValueMap<String, String>(requestBody.mapValues { listOf(it.value) })
 
@@ -21,12 +24,12 @@ object RestTemplateAdapter {
         return exchange(requestUrl, requestMethod, httpEntity, T::class.java)
     }
 
-    fun <T> exchange(requestUrl: String, requestMethod: HttpMethod, httpEntity: HttpEntity<MultiValueMap<String, String>>, clazz: Class<T>) =
-            restTemplate.exchange(requestUrl, requestMethod, httpEntity, clazz)
+    fun <T> exchange(url: String, requestMethod: HttpMethod, httpEntity: HttpEntity<MultiValueMap<String, String>>, clazz: Class<T>) =
+            restTemplate.exchange(url, requestMethod, httpEntity, clazz)
 }
 
 data class FormUrlencodedRequestInfo(
-        val accessToken: String,
+        val accessToken: String? = null,
         val requestBody: Map<String, String> = emptyMap(),
         val requestUrl: String,
         val requestMethod: HttpMethod

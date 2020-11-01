@@ -1,6 +1,7 @@
 package me.sun.notificationservice.domain.service.sender
 
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
+import me.sun.notificationservice.domain.service.notification.CoronaEventNotificationDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,8 +15,8 @@ internal class CoronaStatusSummarySenderTest {
     fun send() {
         coronaStatusSummarySender.send(
                 listOf(
-                        MemberDto("_7ecotJRpF-RcJqkUZqLB2S6fDe4VCwgrrKb3AopcNEAAAF1gs11QQ", listOf(CoronaStatusRegion.BUSAN, CoronaStatusRegion.SEOUL)),
-                        MemberDto("_7ecotJRpF-RcJqkUZqLB2S6fDe4VCwgrrKb3AopcNEAAAF1gs11QQ", emptyList())
+                        CoronaEventNotificationDto("1", "_7ecotJRpF-RcJqkUZqLB2S6fDe4VCwgrrKb3AopcNEAAAF1gs11QQ", setOf(CoronaStatusRegion.BUSAN, CoronaStatusRegion.SEOUL)),
+                        CoronaEventNotificationDto("1", "_7ecotJRpF-RcJqkUZqLB2S6fDe4VCwgrrKb3AopcNEAAAF1gs11QQ", emptySet())
                 ))
     }
 }
