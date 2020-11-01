@@ -1,6 +1,7 @@
 package me.sun.notificationservice.domain.service.oauth
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import me.sun.notificationservice.common.TOKEN
 import me.sun.notificationservice.common.URL
 import me.sun.notificationservice.domain.entity.member.service.MemberTokenDto
 import me.sun.notificationservice.domain.service.adapter.FormUrlencodedRequestInfo
@@ -28,7 +29,7 @@ class KakaoOAuthService {
                 requestMethod = HttpMethod.POST,
                 requestBody = mapOf(
                         "grant_type" to "refresh_token",
-                        "client_id" to "ae23bcc0eb0a5bfe0eb07767dc019cd0",
+                        "client_id" to TOKEN.KAKAO_REST_API,
                         "refresh_token" to refreshToken
                 )
         )

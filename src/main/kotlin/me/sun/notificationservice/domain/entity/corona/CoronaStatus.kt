@@ -2,16 +2,15 @@ package me.sun.notificationservice.domain.entity.corona
 
 import java.time.LocalDateTime
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class CoronaStatus(
         @Id
+        @Column(name = "corona_status_id")
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long? = null,
+        @Enumerated(EnumType.STRING)
         val region: CoronaStatusRegion,
         val domesticOccurrenceCount: Int = 0,
         val foreignInflowCount: Int = 0,

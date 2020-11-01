@@ -7,6 +7,7 @@ import javax.persistence.*
 @Entity
 class CoronaEvent(
         @Id
+        @Column(name = "corona_event_id")
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long? = null,
         @JoinColumn(name = "member_id")

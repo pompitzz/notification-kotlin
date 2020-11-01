@@ -6,3 +6,8 @@ object URL {
     const val KAKAO_PROFILE = "https://kapi.kakao.com/v2/user/me"
     const val KAKAO_REFRESH_TOKEN = "https://kauth.kakao.com/oauth/token"
 }
+
+// TODO 저장소 공개 시 기존 토큰 앱은 제거 후 새로 만들자
+object TOKEN {
+    const val KAKAO_REST_API = "ae23bcc0eb0a5bfe0eb07767dc019cd0"
+}
