@@ -35,7 +35,7 @@ class CoronaEventNotificationService(
     private fun refreshTokenIfNeed(members: List<Member>) {
         val membersNeedTokenRefresh = members.filter { it.memberToken.needRefresh() }
         log.info("### Request token refresh to notify event. {} out of {}", membersNeedTokenRefresh.size, members.size)
-        membersNeedTokenRefresh.forEach { memberQueryService.refreshMemberToken(it) }
+        membersNeedTokenRefresh.forEach { memberQueryService.refreshMemberToken(it.id!!) }
     }
 }
 

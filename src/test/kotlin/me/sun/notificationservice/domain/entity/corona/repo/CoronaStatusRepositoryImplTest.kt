@@ -17,6 +17,7 @@ internal class CoronaStatusRepositoryImplTest {
 
     @BeforeEach
     fun init() {
+        coronaStatusRepository.deleteAll()
         val now = LocalDateTime.now()
         val coronaStatusList = listOf(
                 CoronaStatus(region = BUSAN, measurementDateTime = now.minusDays(1)),

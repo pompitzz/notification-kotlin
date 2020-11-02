@@ -7,6 +7,7 @@ import me.sun.notificationservice.domain.entity.member.repo.MemberRepository
 import me.sun.notificationservice.domain.entity.notification_evnet.CoronaEvent
 import me.sun.notificationservice.domain.entity.notification_evnet.RegionSet
 import me.sun.notificationservice.domain.entity.notification_evnet.repo.CoronaEventRepository
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +25,12 @@ internal class CoronaEventNotificationServiceTest {
 
     @Autowired
     lateinit var coronaEventRepository: CoronaEventRepository
+
+    @BeforeEach
+    fun init() {
+        memberRepository.deleteAll()
+        coronaEventRepository.deleteAll()
+    }
 
     @Test
     fun notifyEvent() {

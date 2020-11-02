@@ -22,14 +22,8 @@ internal class MemberRepositoryTest {
                 refreshToken = "123123",
                 refreshTokenExpirationDateTime = LocalDateTime.now()
         )
-        val member = Member(
-                id = 1L,
-                oauthId = 1L,
-                nickname = "Jayden",
-                memberToken = firstToken
-        )
 
-        memberRepository.save(member)
+        memberRepository.save(Member(oauthId = 1L, nickname = "Jayden", memberToken = firstToken))
 
         val firstSavedMember = memberRepository.findByIdOrNull(1L)!!
         assertThat(firstSavedMember.memberToken).isEqualTo(firstToken)

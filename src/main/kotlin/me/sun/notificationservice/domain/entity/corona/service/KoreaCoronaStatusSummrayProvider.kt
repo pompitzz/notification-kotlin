@@ -12,12 +12,14 @@ class CoronaStatusSummaryProvider(
 ) {
 
     fun provide(): CoronaStatusSummary {
-        var coronaStatusList: List<CoronaStatus> = coronaStatusQueryService.findTodayOrYesterdayStatuses()
+        var coronaStatusList: List<CoronaStatus> = coronaStatusQueryService.findByMeasurementDate(LocalDate.now())
 
         if (coronaStatusList.isEmpty()) {
             coronaStatusQueryService.bulkCoronaStatus()
             coronaStatusList = coronaStatusQueryService.findTodayOrYesterdayStatuses()
         }
+
+        if (coronaStatusList.isEmpty()) throw IllegalStateException("CoronaStatusSummary must exist for today or yesterday!")
 
         return coronaStatusList.toCoronaStatusSummary()
     }

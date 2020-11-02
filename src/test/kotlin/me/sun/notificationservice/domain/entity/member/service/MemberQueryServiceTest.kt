@@ -8,10 +8,12 @@ import me.sun.notificationservice.domain.service.oauth.KakaoOAuthService
 import me.sun.notificationservice.domain.service.oauth.OAuthProfile
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
+
 
 @SpringBootTest
 internal class MemberQueryServiceTest {
@@ -31,12 +33,10 @@ internal class MemberQueryServiceTest {
             refreshTokenExpiresIn = 123123
     )
 
-    private val baseMember = Member(
-            id = 1L,
-            oauthId = 1L,
-            nickname = "Jayden",
-            memberToken = baseMemberTokenDto.toMemberToken()
-    )
+    @BeforeEach
+    fun init() {
+        memberRepository.deleteAll()
+    }
 
     @Test
     fun save() {
@@ -69,7 +69,6 @@ internal class MemberQueryServiceTest {
     @Test
     fun updateAccessAndRefreshToken() {
         // given
-        memberRepository.save(baseMember)
         val updateTokenDto = MemberTokenDto(
                 accessToken = "321321",
                 accessTokenExpiresIn = 1010,
@@ -78,11 +77,15 @@ internal class MemberQueryServiceTest {
         )
 
         every { kakaoOAuthService.requestRefreshToken(any()) } returns updateTokenDto
+
+        val savedMember = memberRepository.save(Member(oauthId = 1L, nickname = "Jayden", memberToken = baseMemberTokenDto.toMemberToken()))
+
         // when
-        memberQueryService.refreshMemberToken(baseMember)
+        val targetId = savedMember.id!!
+        memberQueryService.refreshMemberToken(targetId)
 
         // then
-        val member = memberRepository.findByIdOrNull(1L)!!
+        val member = memberRepository.findByIdOrNull(targetId)!!
         assertThat(member.memberToken.accessToken).isEqualTo(updateTokenDto.accessToken)
         assertThat(member.memberToken.refreshToken).isEqualTo(updateTokenDto.refreshToken)
     }
@@ -90,7 +93,6 @@ internal class MemberQueryServiceTest {
     @Test
     fun updateOnlyAccessToken() {
         // given
-        memberRepository.save(baseMember)
         val updateTokenDto = MemberTokenDto(
                 accessToken = "321321",
                 accessTokenExpiresIn = 1010
@@ -98,8 +100,9 @@ internal class MemberQueryServiceTest {
 
         every { kakaoOAuthService.requestRefreshToken(any()) } returns updateTokenDto
 
+        memberRepository.save(Member(oauthId = 1L, nickname = "Jayden", memberToken = baseMemberTokenDto.toMemberToken()))
         // when
-        memberQueryService.refreshMemberToken(baseMember)
+        memberQueryService.refreshMemberToken(1L)
 
         // then
         val member = memberRepository.findByIdOrNull(1L)!!

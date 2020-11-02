@@ -25,7 +25,12 @@ class MemberQueryService(
     }
 
     @Transactional
-    fun refreshMemberToken(member: Member) {
+    fun refreshMemberToken(memberId: Long) {
+        memberRepository.findAll().forEach {
+            println("-------------- find all --------------")
+            println(it.id)
+        }
+        val member = findById(memberId)
         val memberTokenDtoToUpdate = kakaoOAuthService.requestRefreshToken(member.memberToken.refreshToken)
 
         if (memberTokenDtoToUpdate.hasOnlyAccessToken()) {

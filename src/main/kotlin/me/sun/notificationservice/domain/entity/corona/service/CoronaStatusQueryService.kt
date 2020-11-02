@@ -50,6 +50,6 @@ class CoronaStatusQueryService(
 
 private fun LocalDate.validateMeasurementDay() {
     if (this.isAfter(LocalDate.now())) {
-        throw IllegalArgumentException("measurementDay must not be after today.")
+        throw IllegalArgumentException("measurementDay must not be after today. but is $this")
     }
 }

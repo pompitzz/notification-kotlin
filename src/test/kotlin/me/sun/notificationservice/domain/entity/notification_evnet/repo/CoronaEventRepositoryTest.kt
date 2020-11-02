@@ -8,7 +8,6 @@ import me.sun.notificationservice.domain.entity.member.repo.MemberRepository
 import me.sun.notificationservice.domain.entity.notification_evnet.CoronaEvent
 import me.sun.notificationservice.domain.entity.notification_evnet.RegionSet
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
@@ -22,20 +21,18 @@ internal class CoronaEventRepositoryTest {
     @Autowired
     lateinit var memberRepository: MemberRepository
 
-    @BeforeEach
-    fun init() {
+    @Test
+    fun findAllWithMember() {
+        // given
         val token = MemberToken(
                 accessToken = "123123",
                 accessTokenExpirationDateTime = LocalDateTime.now(),
                 refreshToken = "123123",
                 refreshTokenExpirationDateTime = LocalDateTime.now()
         )
-        val member1 = Member(1L, 1L, "member1", token)
-        val member2 = Member(2L, 2L, "member2", token)
-        val member3 = Member(3L, 3L, "member2", token)
-        memberRepository.save(member1)
-        memberRepository.save(member2)
-        memberRepository.save(member3)
+        val member1 = memberRepository.save(Member(1L, 1L, "member1", token))
+        val member2 = memberRepository.save(Member(2L, 2L, "member2", token))
+        val member3 = memberRepository.save(Member(3L, 3L, "member2", token))
 
         val event1 = CoronaEvent(member = member1, isEnable = true, regionSet = RegionSet(setOf(SEOUL, BUSAN)))
         val event2 = CoronaEvent(member = member2, isEnable = false, regionSet = RegionSet(setOf(BUSAN, GYEONGGI)))
@@ -43,10 +40,7 @@ internal class CoronaEventRepositoryTest {
         coronaEventRepository.save(event1)
         coronaEventRepository.save(event2)
         coronaEventRepository.save(event3)
-    }
 
-    @Test
-    fun findAllWithMember() {
         // when
         println("=========== start =============")
         val coronaEventList = coronaEventRepository.findIsEnableEventsWithMember()
