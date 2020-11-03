@@ -1,30 +1,23 @@
 package me.sun.notificationservice.domain.entity.corona.service
 
+import me.sun.notificationservice.common.utils.logger
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.repo.CoronaStatusRepository
-import me.sun.notificationservice.domain.service.parser.KoreaCoronaStatusParseResult
-import me.sun.notificationservice.domain.service.parser.KoreaDailyCoronaParser
-import me.sun.notificationservice.domain.utils.logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
 class CoronaStatusQueryService(
-        private val coronaStatusRepository: CoronaStatusRepository,
-        private val koreaDailyCoronaParser: KoreaDailyCoronaParser
+        private val coronaStatusRepository: CoronaStatusRepository
 ) {
     private val log = logger<CoronaStatusQueryService>()
 
-    fun bulkCoronaStatus() {
-        val koreaCoronaStatusParseResult: KoreaCoronaStatusParseResult = koreaDailyCoronaParser.parse()
-
-        if (koreaCoronaStatusParseResult.isEmpty()) {
-            log.warn("koreaCoronaStatusParseResult is Empty")
+    fun saveAll(coronaStatusList: List<CoronaStatus>) {
+        if (coronaStatusList.isEmpty()) {
+            log.warn("coronaStatusList is Empty")
             return
         }
-        val coronalStatusList = koreaCoronaStatusParseResult.toEntities()
-
-        coronaStatusRepository.saveAll(coronalStatusList)
+        coronaStatusRepository.saveAll(coronaStatusList)
     }
 
     fun findTodayOrYesterdayStatuses(): List<CoronaStatus> {

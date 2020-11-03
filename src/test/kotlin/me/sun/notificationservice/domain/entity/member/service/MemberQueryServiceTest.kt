@@ -2,10 +2,10 @@ package me.sun.notificationservice.domain.entity.member.service
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import me.sun.notificationservice.application.model.kakao.OAuthProfile
+import me.sun.notificationservice.application.oauth.KakaoOAuthService
 import me.sun.notificationservice.domain.entity.member.Member
-import me.sun.notificationservice.domain.entity.member.repo.MemberRepository
-import me.sun.notificationservice.domain.service.oauth.KakaoOAuthService
-import me.sun.notificationservice.domain.service.oauth.OAuthProfile
+import me.sun.notificationservice.domain.entity.member.MemberRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach

@@ -2,6 +2,7 @@ package me.sun.notificationservice.domain.entity.member.repo
 
 import me.sun.notificationservice.config.DataJpaTestWithQueryDsl
 import me.sun.notificationservice.domain.entity.member.Member
+import me.sun.notificationservice.domain.entity.member.MemberRepository
 import me.sun.notificationservice.domain.entity.member.MemberToken
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

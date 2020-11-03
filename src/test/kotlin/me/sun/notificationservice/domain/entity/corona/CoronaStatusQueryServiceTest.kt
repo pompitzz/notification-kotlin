@@ -9,13 +9,10 @@ import me.sun.notificationservice.config.MockKTest
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion.BUSAN
 import me.sun.notificationservice.domain.entity.corona.repo.CoronaStatusRepository
 import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusQueryService
-import me.sun.notificationservice.domain.service.parser.KoreaCoronaStatusParseResult
-import me.sun.notificationservice.domain.service.parser.KoreaDailyCoronaParser
+import me.sun.notificationservice.application.parser.CoronaStatusParser
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -28,20 +25,7 @@ internal class CoronaStatusQueryServiceTest {
     lateinit var coronaStatusRepository: CoronaStatusRepository
 
     @MockK
-    lateinit var koreaDailyCoronaParser: KoreaDailyCoronaParser
-
-    @Test
-    fun `bulk when parser return empty list, should not call saveAll`() {
-        // given
-        every { koreaDailyCoronaParser.parse() } returns KoreaCoronaStatusParseResult(LocalDateTime.now(), emptyList())
-
-        // when
-        coronaStatusQueryService.bulkCoronaStatus()
-
-        // then
-        verify(exactly = 1) { koreaDailyCoronaParser.parse() }
-        verify(exactly = 0) { coronaStatusRepository.saveAll(emptyList()) }
-    }
+    lateinit var coronaStatusParser: CoronaStatusParser
 
     @Test
     fun `"findByMeasurementDate" when measurementDate is after today, should throw exception`() {
@@ -107,22 +91,5 @@ internal class CoronaStatusQueryServiceTest {
         assertThat(coronaStatusList).isEqualTo(stubData)
         verify(exactly = 1) { coronaStatusRepository.countByMeasurementDate(any()) }
         verify(exactly = 1) { coronaStatusRepository.findByMeasurementDate(any()) }
-    }
-}
-
-@SpringBootTest
-internal class CoronaStatusQueryServiceIntegTest {
-    @Autowired
-    lateinit var coronaStatusQueryService: CoronaStatusQueryService
-
-    @Test
-    fun bulkTest() {
-        coronaStatusQueryService.bulkCoronaStatus()
-        coronaStatusQueryService.findByMeasurementDate(LocalDate.now().minusDays(1))
-                .forEach {
-                    with(it) {
-                        println("CoronaStatus(id=$id, region='$region', domesticOccurrenceCount=$domesticOccurrenceCount, foreignInflowCount=$foreignInflowCount, measurementTime=$measurementDateTime)")
-                    }
-                }
     }
 }
