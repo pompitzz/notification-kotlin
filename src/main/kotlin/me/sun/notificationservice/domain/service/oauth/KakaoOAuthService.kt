@@ -23,7 +23,7 @@ class KakaoOAuthService {
         return OAuthProfile(kakaoProfile.id, kakaoProfile.getNickName())
     }
 
-    fun requestRefreshToken(refreshToken: String): MemberTokenDto {
+    fun requestTokenRefresh(refreshToken: String): MemberTokenDto {
         val formUrlencodedRequestInfo = FormUrlencodedRequestInfo(
                 requestUrl = URL.KAKAO_REFRESH_TOKEN,
                 requestMethod = HttpMethod.POST,

@@ -13,7 +13,7 @@ class MemberQueryService(
         private val kakaoOAuthService: KakaoOAuthService
 ) {
 
-    fun findById(id: Long) =
+    fun findById(id: Long?) =
             memberRepository.findByIdOrNull(id) ?: throw IllegalArgumentException("member must not null. id: $id")
 
     fun save(memberTokenDto: MemberTokenDto) {
@@ -25,21 +25,16 @@ class MemberQueryService(
     }
 
     @Transactional
-    fun refreshMemberToken(memberId: Long) {
-        memberRepository.findAll().forEach {
-            println("-------------- find all --------------")
-            println(it.id)
-        }
+    fun refreshMemberToken(memberId: Long?, memberTokenDto: MemberTokenDto): Member {
         val member = findById(memberId)
-        val memberTokenDtoToUpdate = kakaoOAuthService.requestRefreshToken(member.memberToken.refreshToken)
-
-        if (memberTokenDtoToUpdate.hasOnlyAccessToken()) {
-            memberTokenDtoToUpdate.validateAccessToken()
-            member.memberToken = memberTokenDtoToUpdate.updateOnlyAccessToken(member.memberToken)
+        if (memberTokenDto.hasOnlyAccessToken()) {
+            memberTokenDto.validateAccessToken()
+            member.memberToken = memberTokenDto.updateOnlyAccessToken(member.memberToken)
         } else {
-            memberTokenDtoToUpdate.validateToken()
-            member.memberToken = memberTokenDtoToUpdate.toMemberToken()
+            memberTokenDto.validateToken()
+            member.memberToken = memberTokenDto.toMemberToken()
         }
+        return member
     }
 }
 

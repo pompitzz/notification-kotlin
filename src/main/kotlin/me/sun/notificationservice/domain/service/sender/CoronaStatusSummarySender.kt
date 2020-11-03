@@ -8,6 +8,7 @@ import me.sun.notificationservice.domain.service.notification.CoronaEventNotific
 import me.sun.notificationservice.domain.service.sender.model.KakaoMsgContent
 import me.sun.notificationservice.domain.service.sender.model.KakaoMsgListType
 import me.sun.notificationservice.domain.service.sender.model.KakaoMsgTextType
+import me.sun.notificationservice.domain.utils.logger
 import me.sun.notificationservice.domain.utils.toMonthDay
 import org.springframework.stereotype.Component
 
@@ -18,8 +19,11 @@ class CoronaStatusSummarySender(
         private val coronaStatusSummaryProvider: CoronaStatusSummaryProvider,
         private val kakaoMessageSender: KakaoMessageSender
 ) {
+    private val log = logger<CoronaStatusSummarySender>()
+
     fun send(coronaEventNotificationDtos: List<CoronaEventNotificationDto>) {
         val coronaStatusSummary: CoronaStatusSummary = coronaStatusSummaryProvider.provide()
+        coronaStatusSummary.logging()
         coronaEventNotificationDtos.forEach { send(it, coronaStatusSummary) }
     }
 
@@ -36,6 +40,10 @@ class CoronaStatusSummarySender(
 
     private fun sendCoronaStatusLink(accessToken: String) {
         kakaoMessageSender.send(CORONA_STATUS_LINK, accessToken)
+    }
+
+    private fun CoronaStatusSummary.logging() {
+        log.info("### Get coronaStatusSummary. measurementDate: {} totalConfirmedPersonCount: {}", measurementDate, totalConfirmedPersonCount)
     }
 }
 

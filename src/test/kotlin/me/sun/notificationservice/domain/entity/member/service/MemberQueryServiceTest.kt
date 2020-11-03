@@ -76,16 +76,15 @@ internal class MemberQueryServiceTest {
                 refreshTokenExpiresIn = 1010
         )
 
-        every { kakaoOAuthService.requestRefreshToken(any()) } returns updateTokenDto
+        every { kakaoOAuthService.requestTokenRefresh(any()) } returns updateTokenDto
 
         val savedMember = memberRepository.save(Member(oauthId = 1L, nickname = "Jayden", memberToken = baseMemberTokenDto.toMemberToken()))
 
         // when
-        val targetId = savedMember.id!!
-        memberQueryService.refreshMemberToken(targetId)
+        memberQueryService.refreshMemberToken(savedMember.id, updateTokenDto)
 
         // then
-        val member = memberRepository.findByIdOrNull(targetId)!!
+        val member = memberRepository.findByIdOrNull(savedMember.id)!!
         assertThat(member.memberToken.accessToken).isEqualTo(updateTokenDto.accessToken)
         assertThat(member.memberToken.refreshToken).isEqualTo(updateTokenDto.refreshToken)
     }
@@ -98,11 +97,11 @@ internal class MemberQueryServiceTest {
                 accessTokenExpiresIn = 1010
         )
 
-        every { kakaoOAuthService.requestRefreshToken(any()) } returns updateTokenDto
+        every { kakaoOAuthService.requestTokenRefresh(any()) } returns updateTokenDto
 
         memberRepository.save(Member(oauthId = 1L, nickname = "Jayden", memberToken = baseMemberTokenDto.toMemberToken()))
         // when
-        memberQueryService.refreshMemberToken(1L)
+        memberQueryService.refreshMemberToken(1L, updateTokenDto)
 
         // then
         val member = memberRepository.findByIdOrNull(1L)!!
