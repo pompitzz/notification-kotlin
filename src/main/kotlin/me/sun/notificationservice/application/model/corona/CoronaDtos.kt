@@ -1,5 +1,6 @@
 package me.sun.notificationservice.application.model.corona
 
+import me.sun.notificationservice.common.utils.isToday
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
 import me.sun.notificationservice.domain.entity.corona_evnet.CoronaEvent
