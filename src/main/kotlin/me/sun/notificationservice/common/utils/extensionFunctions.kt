@@ -3,6 +3,7 @@ package me.sun.notificationservice.common.utils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 fun Collection<*>?.validateEmpty() {
@@ -12,6 +13,7 @@ fun Collection<*>?.validateEmpty() {
 }
 
 fun LocalDate.toMonthDay(): String = this.format(DateTimeFormatter.ofPattern("MM-dd"))
+fun LocalDateTime.isToday(): Boolean = this.toLocalDate().isEqual(LocalDate.now())
 
 // private val log = logger<ClassName>()
 inline fun <reified T> logger(): Logger = LoggerFactory.getLogger(T::class.java)

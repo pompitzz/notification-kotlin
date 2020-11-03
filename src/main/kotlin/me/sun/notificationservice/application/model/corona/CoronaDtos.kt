@@ -10,6 +10,8 @@ data class CoronaStatusParseResult(
         val coronaStatusDtoList: List<CoronaStatusDto>
 ) {
     fun toEntities(): List<CoronaStatus> = coronaStatusDtoList.map { it.toEntity() }
+
+    fun todayResult() = coronaStatusDtoList.isNotEmpty() && coronaStatusDtoList[0].measurementDateTime.isToday()
 }
 
 data class CoronaStatusSummary(

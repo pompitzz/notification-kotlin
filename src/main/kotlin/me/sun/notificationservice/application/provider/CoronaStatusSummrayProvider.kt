@@ -24,8 +24,9 @@ class CoronaStatusSummaryProvider(
         var coronaStatusList: List<CoronaStatus> = coronaStatusQueryService.findByMeasurementDate(LocalDate.now())
 
         if (coronaStatusList.isEmpty()) {
-            val coronaStatusParseResult: CoronaStatusParseResult = coronaStatusParser.parse()
-            coronaStatusQueryService.saveAll(coronaStatusParseResult.toEntities())
+            log.info("### No exist today corona status list. Try load today corona status list")
+            tryLoad()
+            // tryLoad 후 오늘 or 어제 데이터를 불러온다.
             coronaStatusList = coronaStatusQueryService.findTodayOrYesterdayStatuses()
         }
 
@@ -34,6 +35,13 @@ class CoronaStatusSummaryProvider(
         if (coronaStatusList.isEmpty()) throw IllegalStateException("CoronaStatusSummary must exist for today or yesterday!")
 
         return coronaStatusList.toCoronaStatusSummary()
+    }
+
+    private fun tryLoad() {
+        val coronaStatusParseResult: CoronaStatusParseResult = coronaStatusParser.parse()
+        if (coronaStatusParseResult.todayResult()) {
+            coronaStatusQueryService.saveAll(coronaStatusParseResult.toEntities())
+        }
     }
 
     private fun List<CoronaStatus>.toCoronaStatusSummary(): CoronaStatusSummary {
