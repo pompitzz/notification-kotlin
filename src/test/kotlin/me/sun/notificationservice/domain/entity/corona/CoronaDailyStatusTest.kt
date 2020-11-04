@@ -5,6 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import io.mockk.verify
+import me.sun.notificationservice.application.model.corona.CoronaStatusParseResult
 import me.sun.notificationservice.application.parser.CoronaStatusParser
 import me.sun.notificationservice.config.MockKTest
 import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusQueryService
@@ -45,8 +46,12 @@ internal class CoronaStatusSummaryProviderTest {
     @Test
     fun `call parse and saveAll when today daily corona not exist`() {
         // given
+        val parseResultMock = mockk<CoronaStatusParseResult>()
+        every { parseResultMock.todayResult() } returns true
+        every { parseResultMock.toEntities() } returns mockk()
+
         every { coronaStatusQueryService.findByMeasurementDate(LocalDate.now()) } returns emptyList()
-        every { coronaStatusParser.parse() } returns mockk(relaxed = true)
+        every { coronaStatusParser.parse() } returns parseResultMock
         every { coronaStatusQueryService.findTodayOrYesterdayStatuses() } returns coronaStatuses
 
         // when

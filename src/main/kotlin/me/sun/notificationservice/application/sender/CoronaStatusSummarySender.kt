@@ -5,6 +5,8 @@ import me.sun.notificationservice.application.model.corona.CoronaStatusSummary
 import me.sun.notificationservice.application.model.kakao.KakaoMsgContent
 import me.sun.notificationservice.application.model.kakao.KakaoMsgListType
 import me.sun.notificationservice.application.model.kakao.KakaoMsgTextType
+import me.sun.notificationservice.application.model.slack.Field
+import me.sun.notificationservice.application.model.slack.SlackAttachment
 import me.sun.notificationservice.application.provider.CoronaStatusSummaryProvider
 import me.sun.notificationservice.common.URL
 import me.sun.notificationservice.common.utils.logger
@@ -17,34 +19,62 @@ private val CORONA_STATUS_LINK = KakaoMsgTextType(text = "자세히(${URL.CORONA
 @Component
 class CoronaStatusSummarySender(
         private val coronaStatusSummaryProvider: CoronaStatusSummaryProvider,
-        private val kakaoMessageSender: KakaoMessageSender
+        private val kakaoMessageSender: KakaoMessageSender,
+        private val slackMessageSender: SlackMessageSender
 ) {
     private val log = logger<CoronaStatusSummarySender>()
 
     fun send(coronaEventNotificationDtos: List<CoronaEventNotificationDto>) {
         val coronaStatusSummary: CoronaStatusSummary = coronaStatusSummaryProvider.provide()
         coronaStatusSummary.logging()
-        coronaEventNotificationDtos.forEach { send(it, coronaStatusSummary) }
+        coronaEventNotificationDtos.forEach {
+            sendKakao(it, coronaStatusSummary)
+            sendSlack(coronaStatusSummary)
+        }
     }
 
-    fun send(coronaEventNotificationDto: CoronaEventNotificationDto, coronaStatusSummary: CoronaStatusSummary) {
+    private fun sendKakao(coronaEventNotificationDto: CoronaEventNotificationDto, coronaStatusSummary: CoronaStatusSummary) {
         val accessToken = coronaEventNotificationDto.accessToken
         val toKakaoMsgListType = coronaStatusSummary.toKakaoMsgListType(coronaEventNotificationDto.selectRegions)
-        sendCoronaStatusSummary(toKakaoMsgListType, accessToken)
-        sendCoronaStatusLink(accessToken)
-    }
-
-    private fun sendCoronaStatusSummary(kakaoMegListType: KakaoMsgListType, accessToken: String) {
-        kakaoMessageSender.send(kakaoMegListType, accessToken)
-    }
-
-    private fun sendCoronaStatusLink(accessToken: String) {
+        kakaoMessageSender.send(toKakaoMsgListType, accessToken)
         kakaoMessageSender.send(CORONA_STATUS_LINK, accessToken)
+    }
+
+    private fun sendSlack(coronaStatusSummary: CoronaStatusSummary) {
+        val slackAttachment = coronaStatusSummary.toSlackAttachment()
+        slackMessageSender.send(slackAttachment)
     }
 
     private fun CoronaStatusSummary.logging() {
         log.info("### Get coronaStatusSummary. measurementDate: {} totalConfirmedPersonCount: {}", measurementDate, totalConfirmedPersonCount)
     }
+}
+
+private fun CoronaStatusSummary.toSlackAttachment(): SlackAttachment {
+    val title = "국내 코로나 상황(${measurementDate.toMonthDay()})"
+
+    val top5Summary = coronaStatusMap.values
+            .sortedByDescending { it.sumCount() }
+            .filterIndexed { index, _ -> index < 5 }
+            .joinToString { it.toSummary() }
+
+    val selectSummary = listOf(CoronaStatusRegion.SEOUL, CoronaStatusRegion.BUSAN)
+            .mapNotNull { coronaStatusMap[it] }
+            .sortedByDescending { it.sumCount() }
+            .joinToString { it.toSummary() }
+
+    val fields = listOf(
+            Field("총 확진자: ${totalConfirmedPersonCount}"),
+            Field("탑 5지역", top5Summary),
+            Field("선택한 지역", selectSummary)
+    )
+
+    return SlackAttachment(
+            title = title,
+            title_link = URL.CORONA_STATUS,
+            footer = "코로나 알리미",
+            fields = fields
+    )
 }
 
 private fun CoronaStatusSummary.toKakaoMsgListType(selectRegions: Set<CoronaStatusRegion>): KakaoMsgListType {

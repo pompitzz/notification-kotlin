@@ -1,0 +1,30 @@
+{
+  "channel": "C015BE6LJ3B",
+  "attachments": [
+    {
+      "pretext": "<!here>",
+      "color": "#36a64f",
+      "title": "코로나 지역별 현황(11-01)",
+      "title_link": "https://api.slack.com/",
+      "fields": [
+        {
+          "title": "총 확진자: 118명",
+          "short": false
+        },
+        {
+          "title": "탑 5지역",
+          "value": "서울 30명, 부산 20명, 마산 1명, 전북 20명",
+          "short": false
+        },
+        {
+          "title": "선택한 지역",
+          "value": "서울 30명, 부산 20명, 마산 1명, 전북 20명",
+          "short": false
+        }
+      ],
+      "footer": "코로나 알리미",
+      "footer_icon": "https://a.slack-edge.com/production-standard-emoji-assets/10.2/apple-large/1f4e2@2x.png",
+      "ts": 1604501437
+    }
+  ]
+}

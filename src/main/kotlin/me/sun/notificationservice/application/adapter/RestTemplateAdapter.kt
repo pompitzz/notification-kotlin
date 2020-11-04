@@ -11,16 +11,23 @@ object RestTemplateAdapter {
     inline fun <reified T> requestWithFormUrlencoded(formUrlencodedRequestInfo: FormUrlencodedRequestInfo): ResponseEntity<T> {
         val (accessToken, requestBody, requestUrl, requestMethod) = formUrlencodedRequestInfo
 
-        val headers = makeHeaders(accessToken)
+        val headers = makeHeaders(accessToken, MediaType.APPLICATION_FORM_URLENCODED)
         val body = LinkedMultiValueMap<String, String>(requestBody.mapValues { listOf(it.value) })
         val httpEntity = HttpEntity<MultiValueMap<String, String>>(body, headers)
-
         return exchange(requestUrl, requestMethod, httpEntity, T::class.java)
     }
 
-    fun makeHeaders(accessToken: String?): HttpHeaders {
+    inline fun <reified T> requestWithJson(jsonRequestInfo: JsonRequestInfo): ResponseEntity<T> {
+        val (accessToken, jsonBody, requestUrl, requestMethod) = jsonRequestInfo
+        println(jsonBody)
+        val headers = makeHeaders(accessToken, MediaType.APPLICATION_JSON)
+        val httpEntity = HttpEntity(jsonBody, headers)
+        return exchange(requestUrl, requestMethod, httpEntity, T::class.java)
+    }
+
+    fun makeHeaders(accessToken: String?, contentType: MediaType): HttpHeaders {
         val headers = HttpHeaders()
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED.toString())
+        headers.add(HttpHeaders.CONTENT_TYPE, contentType.toString())
 
         if (accessToken != null) {
             headers.add(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
@@ -28,7 +35,7 @@ object RestTemplateAdapter {
         return headers
     }
 
-    fun <T> exchange(url: String, requestMethod: HttpMethod, httpEntity: HttpEntity<MultiValueMap<String, String>>, clazz: Class<T>) =
+    fun <T> exchange(url: String, requestMethod: HttpMethod, httpEntity: HttpEntity<*>, clazz: Class<T>) =
             restTemplate.exchange(url, requestMethod, httpEntity, clazz)
 }
 
@@ -39,3 +46,9 @@ data class FormUrlencodedRequestInfo(
         val requestMethod: HttpMethod
 )
 
+data class JsonRequestInfo(
+        val accessToken: String? = null,
+        val json: String? = null,
+        val requestUrl: String,
+        val requestMethod: HttpMethod
+)

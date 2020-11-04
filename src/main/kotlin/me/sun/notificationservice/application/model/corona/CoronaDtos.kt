@@ -39,6 +39,9 @@ data class CoronaStatusDto(
             foreignInflowCount = this.foreignInflowCount,
             measurementDateTime = this.measurementDateTime
     )
+
+    fun sumCount() = domesticOccurrenceCount + foreignInflowCount
+    fun toSummary() = "${regionTitle}: ${domesticOccurrenceCount + foreignInflowCount}"
 }
 
 data class CoronaEventNotificationDto(

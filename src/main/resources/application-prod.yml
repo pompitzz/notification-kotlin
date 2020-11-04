@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    include: prod-db
+    include: prod-db, token
   jpa:
     hibernate:
       ddl-auto: none
