@@ -7,3 +7,8 @@ spring:
         #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
         show_sql: true
+
+slack:
+  token:
+    bot: 123
+    user: 123
