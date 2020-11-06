@@ -55,7 +55,7 @@ private fun CoronaStatusSummary.toSlackAttachment(): SlackAttachment {
 
     val top5Summary = coronaStatusMap.values
             .sortedByDescending { it.sumCount() }
-            .filterIndexed { index, _ -> index < 5 }
+//            .filterIndexed { index, _ -> index < 5 }
             .joinToString { it.toSummary() }
 
     val selectSummary = listOf(CoronaStatusRegion.SEOUL, CoronaStatusRegion.BUSAN)
@@ -65,7 +65,7 @@ private fun CoronaStatusSummary.toSlackAttachment(): SlackAttachment {
 
     val fields = listOf(
             Field("총 확진자: ${totalConfirmedPersonCount}"),
-            Field("탑 5지역", top5Summary),
+            Field("모든 지역", top5Summary),
             Field("선택한 지역", selectSummary)
     )
 
