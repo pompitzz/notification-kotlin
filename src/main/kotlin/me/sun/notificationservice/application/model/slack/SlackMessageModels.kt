@@ -8,7 +8,7 @@ const val LOUD_SPEACKER_ICON_URL = "https://a.slack-edge.com/production-standard
 
 data class SlackAttachment(
         val color: String = "#36a64f",
-        val pretext: String = "<!here>",
+        val pretext: String = "<!channel>",
         val authorName: String? = null,
         val authorLink: String? = null,
         val author_icon: String? = null,
