@@ -1,6 +1,6 @@
-package me.sun.notificationservice.application.sender
+package me.sun.notificationservice.application.corona
 
-import me.sun.notificationservice.application.model.corona.CoronaEventNotificationDto
+import me.sun.notificationservice.application.corona.model.CoronaEventNotificationDto
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

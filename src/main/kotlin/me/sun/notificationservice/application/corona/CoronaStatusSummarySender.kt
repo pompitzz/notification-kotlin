@@ -1,13 +1,14 @@
-package me.sun.notificationservice.application.sender
+package me.sun.notificationservice.application.corona
 
-import me.sun.notificationservice.application.model.corona.CoronaEventNotificationDto
-import me.sun.notificationservice.application.model.corona.CoronaStatusSummary
+import me.sun.notificationservice.application.corona.model.CoronaEventNotificationDto
+import me.sun.notificationservice.application.corona.model.CoronaStatusSummary
 import me.sun.notificationservice.application.model.kakao.KakaoMsgContent
 import me.sun.notificationservice.application.model.kakao.KakaoMsgListType
 import me.sun.notificationservice.application.model.kakao.KakaoMsgTextType
 import me.sun.notificationservice.application.model.slack.Field
 import me.sun.notificationservice.application.model.slack.SlackAttachment
-import me.sun.notificationservice.application.provider.CoronaStatusSummaryProvider
+import me.sun.notificationservice.application.sender.KakaoMessageSender
+import me.sun.notificationservice.application.sender.SlackMessageSender
 import me.sun.notificationservice.common.URL
 import me.sun.notificationservice.common.utils.logger
 import me.sun.notificationservice.common.utils.toMonthDay

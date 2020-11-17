@@ -1,6 +1,5 @@
-package me.sun.notificationservice.application.adapter
+package me.sun.notificationservice.application.corona
 
-import me.sun.notificationservice.application.parser.CoronaStatusParser
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

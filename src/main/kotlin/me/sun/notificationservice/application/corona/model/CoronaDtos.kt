@@ -1,4 +1,4 @@
-package me.sun.notificationservice.application.model.corona
+package me.sun.notificationservice.application.corona.model
 
 import me.sun.notificationservice.common.utils.isToday
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus

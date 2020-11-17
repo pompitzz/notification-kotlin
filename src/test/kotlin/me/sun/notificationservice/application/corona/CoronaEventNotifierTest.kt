@@ -1,12 +1,12 @@
-package me.sun.notificationservice.application.notifier
+package me.sun.notificationservice.application.corona
 
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
-import me.sun.notificationservice.domain.entity.member.Member
-import me.sun.notificationservice.domain.entity.member.MemberToken
-import me.sun.notificationservice.domain.entity.member.MemberRepository
 import me.sun.notificationservice.domain.entity.corona_evnet.CoronaEvent
 import me.sun.notificationservice.domain.entity.corona_evnet.RegionSet
 import me.sun.notificationservice.domain.entity.corona_evnet.repo.CoronaEventRepository
+import me.sun.notificationservice.domain.entity.member.Member
+import me.sun.notificationservice.domain.entity.member.MemberRepository
+import me.sun.notificationservice.domain.entity.member.MemberToken
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

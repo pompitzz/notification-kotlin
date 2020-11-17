@@ -1,11 +1,10 @@
-package me.sun.notificationservice.application.notifier
+package me.sun.notificationservice.application.corona
 
-import me.sun.notificationservice.application.model.corona.CoronaEventNotificationDto
-import me.sun.notificationservice.domain.entity.member.service.MemberAuthService
-import me.sun.notificationservice.domain.entity.corona_evnet.service.CoronaEventQueryService
-import me.sun.notificationservice.application.sender.CoronaStatusSummarySender
+import me.sun.notificationservice.application.corona.model.CoronaEventNotificationDto
 import me.sun.notificationservice.common.utils.logger
 import me.sun.notificationservice.domain.entity.corona_evnet.CoronaEvent
+import me.sun.notificationservice.domain.entity.corona_evnet.service.CoronaEventQueryService
+import me.sun.notificationservice.domain.entity.member.service.MemberAuthService
 import org.springframework.stereotype.Service
 
 @Service

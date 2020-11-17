@@ -25,6 +25,5 @@ class SlackMessageSender(
                         requestMethod = HttpMethod.POST
                 )
         )
-        println(response.body)
     }
 }
