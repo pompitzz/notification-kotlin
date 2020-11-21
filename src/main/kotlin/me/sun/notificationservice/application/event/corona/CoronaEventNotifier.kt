@@ -1,45 +1,55 @@
 package me.sun.notificationservice.application.event.corona
 
-import me.sun.notificationservice.application.event.corona.model.CoronaEventNotificationDto
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusSummary
 import me.sun.notificationservice.common.extension.logger
-import me.sun.notificationservice.domain.entity.corona_evnet.CoronaEvent
-import me.sun.notificationservice.domain.service.corona_event.CoronaEventQueryService
-import me.sun.notificationservice.domain.service.member.MemberAuthService
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 @Service
 class CoronaEventNotifier(
-        private val coronaEventQueryService: CoronaEventQueryService,
-        private val memberAuthService: MemberAuthService,
+        private val coronaStatusSummaryProvider: CoronaStatusSummaryProvider,
         private val coronaStatusSummarySender: CoronaStatusSummarySender
 ) {
-    val log = logger<CoronaEventNotifier>()
+
+    private val log = logger<CoronaStatusSummarySender>()
+
+    companion object {
+        val SINGLE_EXECUTOR: ExecutorService = Executors.newFixedThreadPool(1)
+    }
 
     fun notifyEvent() {
-        refreshToken()
-        val coronaEvents = extractEvents()
-        sendMessage(coronaEvents)
-    }
+        val coronaStatusSummary: CoronaStatusSummary = coronaStatusSummaryProvider.provide()
 
-    private fun refreshToken() {
-        val members = coronaEventQueryService.findIsEnableEventsWithMember().map { it.member }
-        memberAuthService.refreshToken(members)
-    }
-
-    private fun extractEvents(): List<CoronaEvent> {
-        val coronaEvents = coronaEventQueryService.findIsEnableEventsWithMember()
-        log.info("### Find corona event notification target. targetSize: {}", coronaEvents.size)
-        return coronaEvents
-    }
-
-    private fun sendMessage(coronaEvents: List<CoronaEvent>) {
-        if (coronaEvents.isEmpty()) {
-            log.info("### corona event notification target is zero")
+        if (isNotSummaryForToday(coronaStatusSummary)) {
+            log.info("[Retry Corona Alert] current summary is not for today. retry after 10 minute")
+            retryAfterMinute(5)
             return
         }
 
-        val coronaEventNotificationDtos = coronaEvents.map { CoronaEventNotificationDto.from(it) }
-        coronaStatusSummarySender.send(coronaEventNotificationDtos)
-        log.info("### Success send corona event. notification target size: {}", coronaEventNotificationDtos.size)
+        coronaStatusSummary.logging()
+        try {
+            coronaStatusSummarySender.send(coronaStatusSummary)
+        } catch (e: Exception) {
+            log.error("Fail corona status summary send retry after 1 minute]", e)
+            retryAfterMinute(1)
+        }
+    }
+
+    private fun isNotSummaryForToday(coronaStatusSummary: CoronaStatusSummary): Boolean {
+        return LocalDate.now().isAfter(coronaStatusSummary.measurementDate)
+    }
+
+    private fun retryAfterMinute(minute: Long) {
+        SINGLE_EXECUTOR.execute {
+            TimeUnit.MINUTES.sleep(minute)
+            notifyEvent()
+        }
+    }
+
+    private fun CoronaStatusSummary.logging() {
+        log.info("### Get coronaStatusSummary. measurementDate: {} totalConfirmedPersonCount: {}", measurementDate, totalConfirmedPersonCount)
     }
 }
