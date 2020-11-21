@@ -1,4 +1,4 @@
-package me.sun.notificationservice.application.model.member
+package me.sun.notificationservice.application.oauth.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import me.sun.notificationservice.domain.entity.member.MemberToken

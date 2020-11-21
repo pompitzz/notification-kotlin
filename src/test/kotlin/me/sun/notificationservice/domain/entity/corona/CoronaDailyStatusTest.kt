@@ -5,11 +5,11 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import io.mockk.verify
-import me.sun.notificationservice.application.corona.CoronaStatusParser
-import me.sun.notificationservice.application.corona.CoronaStatusSummaryProvider
-import me.sun.notificationservice.application.corona.model.CoronaStatusParseResult
+import me.sun.notificationservice.application.event.corona.CoronaStatusParser
+import me.sun.notificationservice.application.event.corona.CoronaStatusSummaryProvider
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusParseResult
 import me.sun.notificationservice.config.MockKTest
-import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusQueryService
+import me.sun.notificationservice.domain.service.corona.CoronaStatusQueryService
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime

@@ -1,4 +1,4 @@
-package me.sun.notificationservice.infra.config
+package me.sun.notificationservice.common.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper

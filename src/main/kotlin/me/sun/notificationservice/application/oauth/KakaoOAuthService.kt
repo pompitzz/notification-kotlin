@@ -3,8 +3,8 @@ package me.sun.notificationservice.application.oauth
 import com.fasterxml.jackson.annotation.JsonProperty
 import me.sun.notificationservice.application.adapter.FormUrlencodedRequestInfo
 import me.sun.notificationservice.application.adapter.RestTemplateAdapter
-import me.sun.notificationservice.application.model.kakao.OAuthProfile
-import me.sun.notificationservice.application.model.member.MemberTokenDto
+import me.sun.notificationservice.application.oauth.model.MemberTokenDto
+import me.sun.notificationservice.application.sender.kakao.model.OAuthProfile
 import me.sun.notificationservice.common.TOKEN
 import me.sun.notificationservice.common.URL
 import org.springframework.http.HttpMethod

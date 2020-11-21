@@ -19,7 +19,6 @@ object RestTemplateAdapter {
 
     inline fun <reified T> requestWithJson(jsonRequestInfo: JsonRequestInfo): ResponseEntity<T> {
         val (accessToken, jsonBody, requestUrl, requestMethod) = jsonRequestInfo
-        println(jsonBody)
         val headers = makeHeaders(accessToken, MediaType.APPLICATION_JSON)
         val httpEntity = HttpEntity(jsonBody, headers)
         return exchange(requestUrl, requestMethod, httpEntity, T::class.java)

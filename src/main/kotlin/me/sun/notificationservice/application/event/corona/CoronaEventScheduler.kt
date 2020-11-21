@@ -1,6 +1,6 @@
-package me.sun.notificationservice.application.corona
+package me.sun.notificationservice.application.event.corona
 
-import me.sun.notificationservice.common.utils.logger
+import me.sun.notificationservice.common.extension.logger
 import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

@@ -1,4 +1,4 @@
-package me.sun.notificationservice.common.utils
+package me.sun.notificationservice.common.extension
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

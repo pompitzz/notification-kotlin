@@ -1,7 +1,6 @@
-package me.sun.notificationservice.application.model.slack
+package me.sun.notificationservice.application.sender.slack.model
 
-import me.sun.notificationservice.common.SLACK_CHANNEL
-import me.sun.notificationservice.common.utils.toSeoulEpochSecond
+import me.sun.notificationservice.common.extension.toSeoulEpochSecond
 import java.time.LocalDateTime
 
 const val LOUD_SPEACKER_ICON_URL = "https://a.slack-edge.com/production-standard-emoji-assets/10.2/apple-large/1f4e2@2x.png"
@@ -30,10 +29,6 @@ data class Field(
 )
 
 data class SlackMessageDto(
-        val channel: String = SLACK_CHANNEL.GENERAL,
+        val channel: String,
         val attachments: List<SlackAttachment>
-) {
-    companion object {
-        fun of(attachment: SlackAttachment) = SlackMessageDto(attachments = listOf(attachment))
-    }
-}
+)

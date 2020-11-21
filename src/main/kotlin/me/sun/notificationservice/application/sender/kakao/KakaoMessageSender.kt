@@ -1,9 +1,9 @@
-package me.sun.notificationservice.application.sender
+package me.sun.notificationservice.application.sender.kakao
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import me.sun.notificationservice.application.adapter.FormUrlencodedRequestInfo
 import me.sun.notificationservice.application.adapter.RestTemplateAdapter
-import me.sun.notificationservice.application.model.kakao.KakaoMsg
+import me.sun.notificationservice.application.sender.kakao.model.KakaoMsg
 import me.sun.notificationservice.common.URL
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component

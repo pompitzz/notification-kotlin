@@ -1,13 +1,13 @@
-package me.sun.notificationservice.application.corona
+package me.sun.notificationservice.application.event.corona
 
-import me.sun.notificationservice.application.corona.model.CoronaStatusDto
-import me.sun.notificationservice.application.corona.model.CoronaStatusParseResult
-import me.sun.notificationservice.application.corona.model.CoronaStatusSummary
-import me.sun.notificationservice.common.utils.logger
-import me.sun.notificationservice.common.utils.validateEmpty
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusDto
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusParseResult
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusSummary
+import me.sun.notificationservice.common.extension.logger
+import me.sun.notificationservice.common.extension.validateEmpty
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
-import me.sun.notificationservice.domain.entity.corona.service.CoronaStatusQueryService
+import me.sun.notificationservice.domain.service.corona.CoronaStatusQueryService
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 

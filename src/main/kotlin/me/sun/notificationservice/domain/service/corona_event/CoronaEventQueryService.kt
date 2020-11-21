@@ -1,11 +1,11 @@
-package me.sun.notificationservice.domain.entity.corona_evnet.service
+package me.sun.notificationservice.domain.service.corona_event
 
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
-import me.sun.notificationservice.domain.entity.member.Member
-import me.sun.notificationservice.domain.entity.member.service.MemberQueryService
 import me.sun.notificationservice.domain.entity.corona_evnet.CoronaEvent
 import me.sun.notificationservice.domain.entity.corona_evnet.RegionSet
 import me.sun.notificationservice.domain.entity.corona_evnet.repo.CoronaEventRepository
+import me.sun.notificationservice.domain.entity.member.Member
+import me.sun.notificationservice.domain.service.member.MemberQueryService
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,4 +1,4 @@
-package me.sun.notificationservice.application.model.kakao
+package me.sun.notificationservice.application.sender.kakao.model
 
 interface KakaoMsg
 

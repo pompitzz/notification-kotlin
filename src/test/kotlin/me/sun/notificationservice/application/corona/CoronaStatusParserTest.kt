@@ -1,5 +1,6 @@
 package me.sun.notificationservice.application.corona
 
+import me.sun.notificationservice.application.event.corona.CoronaStatusParser
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

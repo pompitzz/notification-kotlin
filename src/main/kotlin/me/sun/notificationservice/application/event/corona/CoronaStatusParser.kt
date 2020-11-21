@@ -1,7 +1,7 @@
-package me.sun.notificationservice.application.corona
+package me.sun.notificationservice.application.event.corona
 
-import me.sun.notificationservice.application.corona.model.CoronaStatusDto
-import me.sun.notificationservice.application.corona.model.CoronaStatusParseResult
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusDto
+import me.sun.notificationservice.application.event.corona.model.CoronaStatusParseResult
 import me.sun.notificationservice.common.URL
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element

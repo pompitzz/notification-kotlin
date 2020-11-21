@@ -1,6 +1,6 @@
-package me.sun.notificationservice.domain.entity.corona.service
+package me.sun.notificationservice.domain.service.corona
 
-import me.sun.notificationservice.common.utils.logger
+import me.sun.notificationservice.common.extension.logger
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.repo.CoronaStatusRepository
 import org.springframework.stereotype.Service

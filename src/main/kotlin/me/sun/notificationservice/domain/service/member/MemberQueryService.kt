@@ -1,7 +1,7 @@
-package me.sun.notificationservice.domain.entity.member.service
+package me.sun.notificationservice.domain.service.member
 
-import me.sun.notificationservice.application.model.member.MemberTokenDto
 import me.sun.notificationservice.application.oauth.KakaoOAuthService
+import me.sun.notificationservice.application.oauth.model.MemberTokenDto
 import me.sun.notificationservice.domain.entity.member.Member
 import me.sun.notificationservice.domain.entity.member.MemberRepository
 import org.springframework.data.repository.findByIdOrNull

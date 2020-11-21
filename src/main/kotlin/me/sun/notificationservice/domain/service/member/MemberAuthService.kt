@@ -1,8 +1,8 @@
-package me.sun.notificationservice.domain.entity.member.service
+package me.sun.notificationservice.domain.service.member
 
-import me.sun.notificationservice.application.model.member.MemberTokenDto
 import me.sun.notificationservice.application.oauth.KakaoOAuthService
-import me.sun.notificationservice.common.utils.logger
+import me.sun.notificationservice.application.oauth.model.MemberTokenDto
+import me.sun.notificationservice.common.extension.logger
 import me.sun.notificationservice.domain.entity.member.Member
 import org.springframework.stereotype.Service
 
