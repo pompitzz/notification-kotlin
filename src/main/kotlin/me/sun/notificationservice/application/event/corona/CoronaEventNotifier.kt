@@ -39,7 +39,7 @@ class CoronaEventNotifier(
     }
 
     private fun isNotSummaryForToday(coronaStatusSummary: CoronaStatusSummary): Boolean {
-        return LocalDate.now().isAfter(coronaStatusSummary.measurementDate)
+        return LocalDate.now().minusDays(1).isAfter(coronaStatusSummary.measurementDate)
     }
 
     private fun retryAfterMinute(minute: Long) {
