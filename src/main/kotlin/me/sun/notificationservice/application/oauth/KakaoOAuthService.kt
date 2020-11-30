@@ -5,7 +5,7 @@ import me.sun.notificationservice.application.adapter.FormUrlencodedRequestInfo
 import me.sun.notificationservice.application.adapter.RestTemplateAdapter
 import me.sun.notificationservice.application.oauth.model.MemberTokenDto
 import me.sun.notificationservice.application.sender.kakao.model.OAuthProfile
-import me.sun.notificationservice.common.TOKEN
+import me.sun.notificationservice.common.API_KEY
 import me.sun.notificationservice.common.URL
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
@@ -30,7 +30,7 @@ class KakaoOAuthService {
                 requestMethod = HttpMethod.POST,
                 requestBody = mapOf(
                         "grant_type" to "refresh_token",
-                        "client_id" to TOKEN.KAKAO_REST_API,
+                        "client_id" to API_KEY.KAKAO_REST_API,
                         "refresh_token" to refreshToken
                 )
         )

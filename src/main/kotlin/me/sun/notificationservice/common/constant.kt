@@ -8,8 +8,7 @@ object URL {
     const val SLACK_SEND_MESSAGE_URL = "https://slack.com/api/chat.postMessage"
 }
 
-// TODO 저장소 공개 시 기존 토큰 앱은 제거 후 새로 만들자
-object TOKEN {
+object API_KEY {
     const val KAKAO_REST_API = "ae23bcc0eb0a5bfe0eb07767dc019cd0"
 }
 
