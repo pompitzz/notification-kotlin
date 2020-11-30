@@ -3,6 +3,6 @@
 
 ## 현재 기능
 ### 코로나 현황 알림
-<img src="./images/corona.png"/>
+<img src="./images/corona.png" width="600" height="200"/>
 
 - 매일 정해진 시간에 전날에 발생한 코로나 현황을 알림
