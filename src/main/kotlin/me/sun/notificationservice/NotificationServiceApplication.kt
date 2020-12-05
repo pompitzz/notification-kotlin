@@ -1,7 +1,8 @@
 package me.sun.notificationservice
 
+import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 
@@ -11,5 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 class NotificationServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<NotificationServiceApplication>(*args)
+    SpringApplicationBuilder(NotificationServiceApplication::class.java)
+            .web(WebApplicationType.SERVLET)
+            .run(*args)
 }
