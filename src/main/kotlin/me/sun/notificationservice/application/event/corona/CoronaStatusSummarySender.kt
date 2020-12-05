@@ -6,6 +6,7 @@ import me.sun.notificationservice.application.sender.slack.model.Field
 import me.sun.notificationservice.application.sender.slack.model.SlackAttachment
 import me.sun.notificationservice.common.SLACK_CHANNEL
 import me.sun.notificationservice.common.URL
+import me.sun.notificationservice.common.extension.logger
 import me.sun.notificationservice.common.extension.toMonthDay
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
 import org.springframework.stereotype.Component
@@ -15,7 +16,11 @@ class CoronaStatusSummarySender(
         private val slackMessageSender: SlackMessageSender
 ) {
 
+    private val log = logger<CoronaStatusSummarySender>()
+
     fun send(coronaStatusSummary: CoronaStatusSummary) {
+        log.info("### Start send corona status summary -> measurementDate: {} totalConfirmedPersonCount: {}",
+                coronaStatusSummary.measurementDate, coronaStatusSummary.totalConfirmedPersonCount)
         val slackAttachment = coronaStatusSummary.toSlackAttachment()
         slackMessageSender.send(SLACK_CHANNEL.CORONA_NOTIFICATION, slackAttachment)
         slackMessageSender.send(SLACK_CHANNEL.PRIVATE_CORONA_NOTIFICATION, slackAttachment)

@@ -29,39 +29,38 @@ internal class CoronaStatusSummaryProviderTest {
     private val coronaStatuses = listOf(CoronaStatus(region = CoronaStatusRegion.DAEJEON, measurementDateTime = LocalDateTime.now()))
 
     @Test
-    fun `must not call parser and saveAll when today daily corona exist`() {
+    fun `getByMeasurementDate should not use parser when coronaStatuses by measurementDate is present`() {
         // given
-        every { coronaStatusQueryService.findByMeasurementDate(LocalDate.now()) } returns coronaStatuses
+        val measurementDate = LocalDate.now()
+        every { coronaStatusQueryService.findByMeasurementDate(measurementDate) } returns coronaStatuses
 
         // when
-        coronaStatusSummaryProvider.provide()
+        coronaStatusSummaryProvider.getByMeasurementDate(measurementDate)
 
         // then
-        verify(exactly = 1) { coronaStatusQueryService.findByMeasurementDate(LocalDate.now()) }
+        verify(exactly = 1) { coronaStatusQueryService.findByMeasurementDate(measurementDate) }
         verify(exactly = 0) { coronaStatusParser.parse() }
         verify(exactly = 0) { coronaStatusQueryService.saveAll(any()) }
-        verify(exactly = 0) { coronaStatusQueryService.findTodayOrYesterdayStatuses() }
     }
 
     @Test
-    fun `call parse and saveAll when today daily corona not exist`() {
+    fun `getByMeasurementDate should use parser when coronaStatuses by measurementDate is not present`() {
         // given
         val parseResultMock = mockk<CoronaStatusParseResult>()
-        every { parseResultMock.todayResult() } returns true
+        every { parseResultMock.isTodayResult() } returns true
         every { parseResultMock.toEntities() } returns mockk()
 
-        every { coronaStatusQueryService.findByMeasurementDate(LocalDate.now()) } returns emptyList()
+        val measurementDate = LocalDate.now()
+        every { coronaStatusQueryService.findByMeasurementDate(measurementDate) } returns emptyList()
         every { coronaStatusParser.parse() } returns parseResultMock
         every { coronaStatusQueryService.findTodayOrYesterdayStatuses() } returns coronaStatuses
 
         // when
-        coronaStatusSummaryProvider.provide()
+        coronaStatusSummaryProvider.getByMeasurementDate(measurementDate)
 
         // then
-        verify(exactly = 1) { coronaStatusQueryService.findByMeasurementDate(LocalDate.now()) }
+        verify(exactly = 2) { coronaStatusQueryService.findByMeasurementDate(measurementDate) }
         verify(exactly = 1) { coronaStatusParser.parse() }
         verify(exactly = 1) { coronaStatusQueryService.saveAll(any()) }
-        verify(exactly = 1) { coronaStatusQueryService.findTodayOrYesterdayStatuses() }
-
     }
 }
