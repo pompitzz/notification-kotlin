@@ -2,26 +2,47 @@ package me.sun.notificationservice.application.event.corona
 
 import me.sun.notificationservice.application.event.corona.model.CoronaStatusDto
 import me.sun.notificationservice.application.event.corona.model.CoronaStatusParseResult
+import me.sun.notificationservice.application.exception.ParserFailException
 import me.sun.notificationservice.common.URL
+import me.sun.notificationservice.common.extension.logger
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
+
+const val MAX_TRY_COUNT = 10
 
 @Component
 class CoronaStatusParser {
-    fun parse(): CoronaStatusParseResult {
-        val document = Jsoup.connect(URL.CORONA_STATUS).get()
 
-        val content = document.getElementById("content")
-        val dataTable = content.getElementsByClass("data_table")[0]
-        val tableBody = dataTable.getElementsByTag("tbody")[0]
+    private val log = logger<CoronaStatusParser>()
 
-        val measurementDateTime = parseMeasurementTime(content.selectFirst(".timetable"))
-        val koreaCoronaStatusList = parseTableBody(tableBody, measurementDateTime)
+    fun parse() = parseWithRetry(1)
 
-        return CoronaStatusParseResult(koreaCoronaStatusList)
+    private fun parseWithRetry(retryCount: Int): CoronaStatusParseResult {
+        try {
+            val document = Jsoup.connect(URL.CORONA_STATUS).get()
+
+            val content = document.getElementById("content")
+            val dataTable = content.getElementsByClass("data_table")[0]
+            val tableBody = dataTable.getElementsByTag("tbody")[0]
+
+            val measurementDateTime = parseMeasurementTime(content.selectFirst(".timetable"))
+            val koreaCoronaStatusList = parseTableBody(tableBody, measurementDateTime)
+
+            return CoronaStatusParseResult(koreaCoronaStatusList)
+        } catch (e: Exception) {
+            if (MAX_TRY_COUNT > retryCount) {
+                log.warn("[Fail Parse Corona Status]. exceed MAX_TRY_COUNT({}).", MAX_TRY_COUNT, e)
+                throw ParserFailException("Fail Parse Corona Status MAX_TRY_COUNT($MAX_TRY_COUNT)", e)
+            }
+
+            log.info("[Fail Parse Corona Status] start retry with sleep 5 minutes... currentRetryCount: {}", retryCount)
+            TimeUnit.SECONDS.sleep(5)
+            return parseWithRetry(retryCount + 1)
+        }
     }
 
     private fun parseMeasurementTime(timeTable: Element): LocalDateTime {

@@ -1,6 +1,7 @@
 package me.sun.notificationservice.application.event.corona
 
 import me.sun.notificationservice.application.event.corona.model.CoronaStatusSummary
+import me.sun.notificationservice.application.sender.ExceptionMessageSender
 import me.sun.notificationservice.common.extension.logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -11,7 +12,8 @@ import java.util.concurrent.TimeUnit
 @Service
 class CoronaEventNotifier(
         private val coronaStatusSummaryProvider: CoronaStatusSummaryProvider,
-        private val coronaStatusSummarySender: CoronaStatusSummarySender
+        private val coronaStatusSummarySender: CoronaStatusSummarySender,
+        private val exceptionMessageSender: ExceptionMessageSender
 ) {
 
     private val log = logger<CoronaStatusSummarySender>()
@@ -21,27 +23,19 @@ class CoronaEventNotifier(
     }
 
     fun notifyEvent() {
-        val coronaStatusSummary: CoronaStatusSummary? = coronaStatusSummaryProvider.getByMeasurementDate(LocalDate.now())
-
-        if (coronaStatusSummary == null) {
-            log.info("[Retry Corona Alert] current summary is not for today. retry after 10 minute")
-            retryAfterMinute(5)
-            return
-        }
-
         try {
+            val coronaStatusSummary: CoronaStatusSummary? = coronaStatusSummaryProvider.getByMeasurementDate(LocalDate.now())
+
+            if (coronaStatusSummary == null) {
+                log.info("[Retry Corona Alert] current summary is not for today. start retry with sleep 5 minute ...")
+                TimeUnit.MINUTES.sleep(5)
+                notifyEvent()
+                return
+            }
+
             coronaStatusSummarySender.send(coronaStatusSummary)
         } catch (e: Exception) {
-            log.error("Fail corona status summary send retry after 1 minute]", e)
-            retryAfterMinute(1)
+            exceptionMessageSender.send(e, "CoronaEventNotifier Fail!")
         }
     }
-
-    private fun retryAfterMinute(minute: Long) {
-        SINGLE_EXECUTOR.execute {
-            TimeUnit.MINUTES.sleep(minute)
-            notifyEvent()
-        }
-    }
-
 }

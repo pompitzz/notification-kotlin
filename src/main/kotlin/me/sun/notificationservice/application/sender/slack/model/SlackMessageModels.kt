@@ -14,7 +14,7 @@ data class SlackAttachment(
         val title: String? = null,
         val title_link: String? = null,
         val text: String? = null,
-        val fields: List<Field>,
+        val fields: List<SlackAttachmentField>,
         val imageUrl: String? = null,
         val thumbUrl: String? = null,
         val footer: String? = null,
@@ -22,7 +22,7 @@ data class SlackAttachment(
         val ts: Long = LocalDateTime.now().toSeoulEpochSecond()
 )
 
-data class Field(
+data class SlackAttachmentField(
         val title: String? = null,
         val value: String? = null,
         val short: Boolean = false

@@ -11,4 +11,4 @@ spring:
 slack:
   token:
     bot: 123
-    user: 123
+    user: 456

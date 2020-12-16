@@ -2,8 +2,8 @@ package me.sun.notificationservice.application.event.corona
 
 import me.sun.notificationservice.application.event.corona.model.CoronaStatusSummary
 import me.sun.notificationservice.application.sender.slack.SlackMessageSender
-import me.sun.notificationservice.application.sender.slack.model.Field
 import me.sun.notificationservice.application.sender.slack.model.SlackAttachment
+import me.sun.notificationservice.application.sender.slack.model.SlackAttachmentField
 import me.sun.notificationservice.common.SLACK_CHANNEL
 import me.sun.notificationservice.common.URL
 import me.sun.notificationservice.common.extension.logger
@@ -41,9 +41,9 @@ class CoronaStatusSummarySender(
                 .joinToString { it.toSummary() }
 
         val fields = listOf(
-                Field("총 확진자: $totalConfirmedPersonCount"),
-                Field("모든 지역", top5Summary),
-                Field("선택한 지역", selectSummary)
+                SlackAttachmentField("총 확진자: $totalConfirmedPersonCount"),
+                SlackAttachmentField("모든 지역", top5Summary),
+                SlackAttachmentField("선택한 지역", selectSummary)
         )
 
         return SlackAttachment(
