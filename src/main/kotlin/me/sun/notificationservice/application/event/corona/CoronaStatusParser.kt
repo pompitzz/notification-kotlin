@@ -13,6 +13,7 @@ import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 const val MAX_TRY_COUNT = 10
+val DATE_REGEX = """\d\d\.\d\d\.\s*\d\d시""".toRegex()
 
 @Component
 class CoronaStatusParser {
@@ -47,9 +48,10 @@ class CoronaStatusParser {
 
     private fun parseMeasurementTime(timeTable: Element): LocalDateTime {
         val text = timeTable.selectFirst("span").text()
-        val dateTokens = text.split('.')
+        val result = DATE_REGEX.find(text)
+                ?: throw IllegalStateException("Invalid time table text please check. text: $text")
 
-        if (dateTokens.size != 3) throw IllegalStateException("Invalid time table text please check. text: $text")
+        val dateTokens = result.value.split('.')
 
         val year = LocalDate.now().year
         val month = dateTokens[0].trim().toInt()
