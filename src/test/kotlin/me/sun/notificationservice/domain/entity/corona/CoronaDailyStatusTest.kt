@@ -47,7 +47,7 @@ internal class CoronaStatusSummaryProviderTest {
     fun `getByMeasurementDate should use parser when coronaStatuses by measurementDate is not present`() {
         // given
         val parseResultMock = mockk<CoronaStatusParseResult>()
-        every { parseResultMock.isTodayResult() } returns true
+        every { parseResultMock.isSameDayWith(LocalDate.now()) } returns true
         every { parseResultMock.toEntities() } returns mockk()
 
         val measurementDate = LocalDate.now()

@@ -18,12 +18,20 @@ class CoronaStatusSummarySender(
 
     private val log = logger<CoronaStatusSummarySender>()
 
-    fun send(coronaStatusSummary: CoronaStatusSummary) {
+    fun sendSuccess(coronaStatusSummary: CoronaStatusSummary) {
         log.info("### Start send corona status summary -> measurementDate: {} totalConfirmedPersonCount: {}",
                 coronaStatusSummary.measurementDate, coronaStatusSummary.totalConfirmedPersonCount)
         val slackAttachment = coronaStatusSummary.toSlackAttachment()
-        slackMessageSender.send(SLACK_CHANNEL.CORONA_NOTIFICATION, slackAttachment)
+//        slackMessageSender.send(SLACK_CHANNEL.CORONA_NOTIFICATION, slackAttachment)
         slackMessageSender.send(SLACK_CHANNEL.PRIVATE_CORONA_NOTIFICATION, slackAttachment)
+    }
+
+    fun sendRetry(retryCount: Int, preText: String?) {
+        val attachment = SlackAttachment(
+                fields = listOf(SlackAttachmentField(value = "현재까지 재시도 횟수: $retryCount")),
+                pretext = preText
+        )
+        slackMessageSender.send(SLACK_CHANNEL.PRIVATE_CORONA_NOTIFICATION, attachment)
     }
 
     private fun CoronaStatusSummary.toSlackAttachment(): SlackAttachment {
@@ -48,6 +56,7 @@ class CoronaStatusSummarySender(
 
         return SlackAttachment(
                 title = title,
+                pretext = "<!channel>",
                 title_link = URL.CORONA_STATUS,
                 footer = "코로나 알리미",
                 fields = fields

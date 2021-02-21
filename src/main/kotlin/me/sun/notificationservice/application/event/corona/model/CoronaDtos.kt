@@ -1,6 +1,6 @@
 package me.sun.notificationservice.application.event.corona.model
 
-import me.sun.notificationservice.common.extension.isToday
+import me.sun.notificationservice.common.extension.isSameDayWith
 import me.sun.notificationservice.domain.entity.corona.CoronaStatus
 import me.sun.notificationservice.domain.entity.corona.CoronaStatusRegion
 import me.sun.notificationservice.domain.entity.corona_evnet.CoronaEvent
@@ -12,7 +12,7 @@ data class CoronaStatusParseResult(
 ) {
     fun toEntities(): List<CoronaStatus> = coronaStatusDtoList.map { it.toEntity() }
 
-    fun isTodayResult() = coronaStatusDtoList.isNotEmpty() && coronaStatusDtoList[0].measurementDateTime.isToday()
+    fun isSameDayWith(measurementDate: LocalDate) = coronaStatusDtoList.isNotEmpty() && coronaStatusDtoList[0].measurementDateTime.isSameDayWith(measurementDate)
 }
 
 data class CoronaStatusSummary(

@@ -23,20 +23,16 @@ class CoronaStatusSummaryProvider(
 
         if (coronaStatusList.isEmpty()) {
             log.info("### No exist today corona status list. Try load today corona status list")
-            parseCoronaStatus()
+            val coronaStatusParseResult: CoronaStatusParseResult = coronaStatusParser.parse()
+            if (coronaStatusParseResult.isSameDayWith(measurementDate)) {
+                coronaStatusQueryService.saveAll(coronaStatusParseResult.toEntities())
+            }
             coronaStatusList = coronaStatusQueryService.findByMeasurementDate(measurementDate)
         }
 
         log.info("### Found {} size coronaStatuses", coronaStatusList.size)
 
         return coronaStatusList.toCoronaStatusSummary()
-    }
-
-    private fun parseCoronaStatus() {
-        val coronaStatusParseResult: CoronaStatusParseResult = coronaStatusParser.parse()
-        if (coronaStatusParseResult.isTodayResult()) {
-            coronaStatusQueryService.saveAll(coronaStatusParseResult.toEntities())
-        }
     }
 
     private fun List<CoronaStatus>.toCoronaStatusSummary(): CoronaStatusSummary? {

@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class CoronaEventScheduler(
-        private val coronaEventNotifier: CoronaEventNotifier
+        private val coronaRetryEventNotifier: CoronaEventNotifier
 ) {
 
     private val log = logger<CoronaEventScheduler>()
 
     @Async
-    @Scheduled(cron = "0 1 10 * * *") // 매일 오전 10시 1분 0초에 수행
+    @Scheduled(cron = "0 0 7 * * *") // 매일 오전 7시에 수행
     fun run() {
         log.info("### start corona event notification")
-        coronaEventNotifier.notifyEvent()
+        coronaRetryEventNotifier.notifyEvent()
     }
 }

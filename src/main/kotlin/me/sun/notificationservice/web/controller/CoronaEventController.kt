@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class CoronaEventController(
-        private val coronaEventNotifier: CoronaEventNotifier
+        private val coronaSimpleEventNotifier: CoronaEventNotifier
 ) {
     @GetMapping("/notify")
-    fun notifyCoronaEvent() {
-        coronaEventNotifier.notifyEvent()
-    }
+    fun notifyCoronaEvent() = if (coronaSimpleEventNotifier.notifyEvent()) "success" else "fail"
 }

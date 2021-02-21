@@ -14,7 +14,7 @@ fun Collection<*>?.validateEmpty() {
 }
 
 fun LocalDate.toMonthDay(): String = this.format(DateTimeFormatter.ofPattern("MM-dd"))
-fun LocalDateTime.isToday(): Boolean = this.toLocalDate().isEqual(LocalDate.now())
+fun LocalDateTime.isSameDayWith(localDate: LocalDate): Boolean = this.toLocalDate().isEqual(localDate)
 fun LocalDateTime.toSeoulEpochSecond(): Long = this.toEpochSecond(ZoneOffset.ofHours(9))
 
 // private val log = logger<ClassName>()
