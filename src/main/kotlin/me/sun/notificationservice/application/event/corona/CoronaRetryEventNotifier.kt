@@ -24,7 +24,11 @@ class CoronaRetryEventNotifier(
 
             if (coronaStatusSummary == null) {
                 log.info("[Retry Corona Alert] current summary is not for today. retry after sleeping 1 minute...")
-                if (retryCount % 60 == 0) {
+                if (retryCount > 200) {
+                    if (retryCount % 100 == 0) {
+                        coronaStatusSummarySender.sendRetry(retryCount, "<@dongmyeong.lee22>")
+                    }
+                } else if (retryCount % 200 == 0) {
                     coronaStatusSummarySender.sendRetry(retryCount, "<@dongmyeong.lee22>")
                 }
                 TimeUnit.MINUTES.sleep(1)
@@ -32,7 +36,6 @@ class CoronaRetryEventNotifier(
             }
 
             coronaStatusSummarySender.sendSuccess(coronaStatusSummary)
-            coronaStatusSummarySender.sendRetry(retryCount, null)
             return true
         } catch (e: Exception) {
             exceptionMessageSender.send(e, "CoronaEventNotifier Fail!")
