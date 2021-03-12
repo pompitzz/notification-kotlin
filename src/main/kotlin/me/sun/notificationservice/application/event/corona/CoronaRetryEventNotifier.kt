@@ -5,6 +5,7 @@ import me.sun.notificationservice.application.sender.ExceptionMessageSender
 import me.sun.notificationservice.common.extension.logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.concurrent.TimeUnit
 
 @Service
@@ -16,7 +17,7 @@ class CoronaRetryEventNotifier(
 
     private val log = logger<CoronaStatusSummarySender>()
 
-    override fun notifyEvent() = doNotify(0)
+    override fun notifyEvent() = doNotify(1)
 
     fun doNotify(retryCount: Int): Boolean {
         try {
@@ -24,21 +25,18 @@ class CoronaRetryEventNotifier(
 
             if (coronaStatusSummary == null) {
                 log.info("[Retry Corona Alert] current summary is not for today. retry after sleeping 1 minute...")
-                if (retryCount > 200) {
-                    if (retryCount % 100 == 0) {
-                        coronaStatusSummarySender.sendRetry(retryCount, "<@dongmyeong.lee22>")
-                    }
-                } else if (retryCount % 200 == 0) {
+                if (LocalTime.now() > LocalTime.of(12, 0)) {
                     coronaStatusSummarySender.sendRetry(retryCount, "<@dongmyeong.lee22>")
+                    return false
                 }
-                TimeUnit.MINUTES.sleep(1)
+                TimeUnit.MINUTES.sleep(5)
                 return doNotify(retryCount + 1)
             }
 
             coronaStatusSummarySender.sendSuccess(coronaStatusSummary)
             return true
         } catch (e: Exception) {
-            exceptionMessageSender.send(e, "CoronaEventNotifier Fail!")
+            exceptionMessageSender.send(e, "CoronaEventNotifier Fail! retryCount: $retryCount")
             return false
         }
     }

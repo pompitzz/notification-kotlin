@@ -13,7 +13,7 @@ class CoronaEventScheduler(
     private val log = logger<CoronaEventScheduler>()
 
     @Async
-    @Scheduled(cron = "0 0 7 * * *") // 매일 오전 7시에 수행
+    @Scheduled(cron = "0 30 9 * * *") // 매일 오전 7시에 수행
     fun run() {
         log.info("### start corona event notification")
         coronaRetryEventNotifier.notifyEvent()

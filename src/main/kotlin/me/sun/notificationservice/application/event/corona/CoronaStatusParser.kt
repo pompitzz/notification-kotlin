@@ -41,7 +41,7 @@ class CoronaStatusParser {
             }
 
             log.info("[Fail Parse Corona Status] start retry with sleep 5 minutes... currentRetryCount: {}", retryCount)
-            TimeUnit.SECONDS.sleep(5)
+            TimeUnit.MINUTES.sleep(5)
             return parseWithRetry(retryCount + 1)
         }
     }
